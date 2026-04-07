@@ -12,7 +12,7 @@
 body {
     background-color: var(--shadow-grey);
     color: var(--porcelain);
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     line-height: 1.4;
 }
 
