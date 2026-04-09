@@ -59,17 +59,35 @@ if (formCadastro) formCadastro.addEventListener('submit', registrarItem);
 if (inputItem) inputItem.addEventListener('keydown', (event) => (event.code === 'Enter') && formCadastro.submit());
 
 // Lógica para a página de Listagem
-const listaUl = document.getElementById('lista');
-if (listaUl) {
+function formatarItem(texto) {
+    const li = document.createElement('li');
+    const input = document.createElement('input');
+    const label = document.createElement('label');
+
+    input.type = 'checkbox';
+    input.id = `item-${crypto.randomUUID()}`;
+
+    label.setAttribute('for', input.id);
+    label.textContent = texto;
+
+    input.addEventListener('change', () => {
+        li.remove();
+        Armazenamento.deletarItem(texto);
+    });
+
+    li.appendChild(input);
+    li.appendChild(label);
+
+    return li;
+}
+
+const listaItens = document.getElementById('lista');
+
+if (listaItens) {
     const itens = Armazenamento.getItens();
-    
-    if (itens.length === 0) {
-        listaUl.innerHTML = '<li>Nenhum item cadastrado.</li>';
-    } else {
-        itens.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            listaUl.appendChild(li);
-        });
-    }
+
+    if (itens.length === 0)
+        listaItens.innerHTML = '<li>Nenhum item cadastrado.</li>';
+    else
+        itens.forEach((item) => listaItens.appendChild(formatarItem(item)));
 }
