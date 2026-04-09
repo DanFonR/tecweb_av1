@@ -1,13 +1,27 @@
 // Gerenciador de Itens (Armazenamento em Memória da Sessão)
-const Storage = {
+const Armazenamento = {
     getItens() {
-        const itens = sessionStorage.getItem('lista_itens');
+        const itens = localStorage.getItem('lista_itens');
+
         return itens ? JSON.parse(itens) : [];
     },
+
     salvarItem(nome) {
         const itens = this.getItens();
+
+        if (itens.some(item => item === nome)) return false;
+
         itens.push(nome);
-        sessionStorage.setItem('lista_itens', JSON.stringify(itens));
+        localStorage.setItem('lista_itens', JSON.stringify(itens));
+
+        return true;
+    },
+
+    deletarItem(nome) {
+        const itens = this.getItens();
+        const novoItens = itens.filter(item => item !== nome);
+
+        localStorage.setItem('lista-itens', JSON.stringify(novoItens));
     }
 };
 
@@ -21,7 +35,7 @@ if (formCadastro) {
         const valor = inputItem.value.trim();
         
         if (valor) {
-            Storage.salvarItem(valor);
+            Armazenamento.salvarItem(valor);
             inputItem.value = '';
             alert('Item "' + valor + '" cadastrado com sucesso!');
         }
@@ -31,7 +45,7 @@ if (formCadastro) {
 // Lógica para a página de Listagem
 const listaUl = document.getElementById('lista');
 if (listaUl) {
-    const itens = Storage.getItens();
+    const itens = Armazenamento.getItens();
     
     if (itens.length === 0) {
         listaUl.innerHTML = '<li>Nenhum item cadastrado.</li>';
