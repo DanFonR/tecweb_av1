@@ -28,6 +28,7 @@ const Armazenamento = {
 // Lógica para a página de Cadastro
 const formCadastro = document.getElementById('cadastro-itens');
 const inputItem = document.getElementById('item');
+const botoesSugestoes = document.getElementsByClassName('botao-sugestao');
 
 function registrarItem(event) {
     if (!inputItem) return;
@@ -55,6 +56,9 @@ function registrarItem(event) {
 
 if (formCadastro) formCadastro.addEventListener('submit', (event) => {event.preventDefault(); registrarItem(event);});
 if (inputItem) inputItem.addEventListener('keydown', (event) => (event.code === 'Enter') && formCadastro.submit());
+if (botoesSugestoes.length !== 0)
+    for (const botao of botoesSugestoes)
+        botao.addEventListener('click', registrarItem);
 
 // Lógica para a página de Listagem
 function removerElementoItem(elementoItem, texto) {
