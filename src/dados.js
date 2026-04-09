@@ -27,20 +27,36 @@ const Armazenamento = {
 
 // Lógica para a página de Cadastro
 const formCadastro = document.getElementById('cadastro-itens');
-if (formCadastro) {
-    const inputItem = document.getElementById('item');
-    
-    formCadastro.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const valor = inputItem.value.trim();
-        
-        if (valor) {
-            Armazenamento.salvarItem(valor);
-            inputItem.value = '';
-            alert('Item "' + valor + '" cadastrado com sucesso!');
-        }
-    });
+const inputItem = document.getElementById('item');
+
+function registrarItem(event) {
+    if (!inputItem) return;
+
+    let valorTemp;
+
+    if (event.type === 'submit') {
+        event.preventDefault(); // Evita recarregamento da página
+
+        valorTemp = inputItem.value;
+    }
+    else valorTemp = event.currentTarget.textContent;
+
+    const valor = valorTemp.trim();
+
+    if (!valor) {
+        alert('Nenhum valor inserido!');
+        return;
+    };
+
+    const mensagens = [`"${valor}" já existe!`, `"${valor}" cadastrado com sucesso!`];
+    const foiSalvo = Armazenamento.salvarItem(valor);
+
+    inputItem.value = '';
+    alert(mensagens[Number(foiSalvo)]);
 }
+
+if (formCadastro) formCadastro.addEventListener('submit', registrarItem);
+if (inputItem) inputItem.addEventListener('keydown', (event) => (event.code === 'Enter') && formCadastro.submit());
 
 // Lógica para a página de Listagem
 const listaUl = document.getElementById('lista');
