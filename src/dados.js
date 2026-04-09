@@ -11,7 +11,7 @@ const Armazenamento = {
 
         if (itens.some(item => item === nome)) return false;
 
-        itens.push(nome);
+        itens.push(String(nome));
         localStorage.setItem('lista_itens', JSON.stringify(itens));
 
         return true;
@@ -21,7 +21,7 @@ const Armazenamento = {
         const itens = this.getItens();
         const novoItens = itens.filter(item => item !== nome);
 
-        localStorage.setItem('lista-itens', JSON.stringify(novoItens));
+        localStorage.setItem('lista_itens', JSON.stringify(novoItens));
     }
 };
 
@@ -35,8 +35,6 @@ function registrarItem(event) {
     let valorTemp;
 
     if (event.type === 'submit') {
-        event.preventDefault(); // Evita recarregamento da página
-
         valorTemp = inputItem.value;
     }
     else valorTemp = event.currentTarget.textContent;
@@ -55,10 +53,19 @@ function registrarItem(event) {
     alert(mensagens[Number(foiSalvo)]);
 }
 
-if (formCadastro) formCadastro.addEventListener('submit', registrarItem);
+if (formCadastro) formCadastro.addEventListener('submit', (event) => {event.preventDefault(); registrarItem(event);});
 if (inputItem) inputItem.addEventListener('keydown', (event) => (event.code === 'Enter') && formCadastro.submit());
 
 // Lógica para a página de Listagem
+function removerElementoItem(elementoItem, texto) {
+    Armazenamento.deletarItem(texto);
+    if (Armazenamento.getItens().length === 0)
+        elementoItem.parentElement.innerHTML = '<li>Nenhum item cadastrado.</li>';
+
+    elementoItem.remove();
+    alert(`"${texto}" foi removido!`);
+}
+
 function formatarItem(texto) {
     const li = document.createElement('li');
     const input = document.createElement('input');
@@ -70,10 +77,7 @@ function formatarItem(texto) {
     label.setAttribute('for', input.id);
     label.textContent = texto;
 
-    input.addEventListener('change', () => {
-        li.remove();
-        Armazenamento.deletarItem(texto);
-    });
+    input.addEventListener('change', () => removerElementoItem(li, texto));
 
     li.appendChild(input);
     li.appendChild(label);
@@ -81,13 +85,34 @@ function formatarItem(texto) {
     return li;
 }
 
-const listaItens = document.getElementById('lista');
-
-if (listaItens) {
+function listarItens(elementoLista, qtd = -1) {
     const itens = Armazenamento.getItens();
 
-    if (itens.length === 0)
-        listaItens.innerHTML = '<li>Nenhum item cadastrado.</li>';
-    else
-        itens.forEach((item) => listaItens.appendChild(formatarItem(item)));
+    if (qtd === -1) qtd = itens.length;
+    const min = Math.min(qtd, itens.length);
+
+    if (itens.length === 0) {
+        elementoLista.innerHTML = '<li>Nenhum item cadastrado.</li>';
+    }
+    else for (let ind = 0; ind < min; ind++)
+        elementoLista.appendChild(formatarItem(itens[ind]));
+}
+
+const listaItens = document.getElementById('lista');
+const resumoItens = document.getElementById('lista-resumo');
+const qtd = 5;
+
+if (listaItens) {
+    window.onload = () => listarItens(listaItens);
+    listaItens.addEventListener('change', () => {
+        listaItens.innerHTML = '';
+        listarItens(listaItens, qtd);
+    });
+}
+if (resumoItens) {
+    window.onload = () => listarItens(resumoItens, qtd);
+    resumoItens.addEventListener('change', () => {
+        resumoItens.innerHTML = '';
+        listarItens(resumoItens, qtd);
+    });
 }
