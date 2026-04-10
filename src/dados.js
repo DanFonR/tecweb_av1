@@ -30,12 +30,20 @@ const formCadastro = document.getElementById('cadastro-itens');
 const inputItem = document.getElementById('item');
 const botoesSugestoes = document.getElementsByClassName('botao-sugestao');
 
+function animarElemento(elemento, classe, tempo = 1000) {
+    elemento.classList.toggle(classe);
+
+    if (tempo !== 0)
+        setTimeout(() => elemento.classList.toggle(classe), tempo);
+}
+
 function registrarItem(event) {
     if (!inputItem) return;
 
     let valorTemp;
 
     if (event.type === 'submit') {
+        event.preventDefault();
         valorTemp = inputItem.value;
     }
     else valorTemp = event.currentTarget.textContent;
@@ -43,31 +51,32 @@ function registrarItem(event) {
     const valor = valorTemp.trim();
 
     if (!valor) {
-        alert('Nenhum valor inserido!');
+        animarElemento(event.currentTarget, "input-empty");
         return;
     };
 
-    const mensagens = [`"${valor}" já existe!`, `"${valor}" cadastrado com sucesso!`];
+    const estilos = ["input-error", "input-ok"];
     const foiSalvo = Armazenamento.salvarItem(valor);
 
     inputItem.value = '';
-    alert(mensagens[Number(foiSalvo)]);
+    animarElemento(event.currentTarget, estilos[Number(foiSalvo)]);
 }
 
-if (formCadastro) formCadastro.addEventListener('submit', (event) => {event.preventDefault(); registrarItem(event);});
-if (inputItem) inputItem.addEventListener('keydown', (event) => (event.code === 'Enter') && formCadastro.submit());
+if (formCadastro) formCadastro.addEventListener('submit', registrarItem);
+
 if (botoesSugestoes.length !== 0)
     for (const botao of botoesSugestoes)
         botao.addEventListener('click', registrarItem);
 
 // Lógica para a página de Listagem
-function removerElementoItem(elementoItem, texto) {
+function removerElementoItem(elementoItem, texto, elementoPai, qtd = -1) {
     Armazenamento.deletarItem(texto);
-    if (Armazenamento.getItens().length === 0)
-        elementoItem.parentElement.innerHTML = '<li>Nenhum item cadastrado.</li>';
 
-    elementoItem.remove();
-    alert(`"${texto}" foi removido!`);
+    animarElemento(elementoItem, "under-deletion", 0);
+    elementoItem.addEventListener('animationend', () => {
+        elementoItem.remove();
+        listarItens(elementoPai, qtd);
+    });
 }
 
 function formatarItem(texto) {
@@ -75,13 +84,17 @@ function formatarItem(texto) {
     const input = document.createElement('input');
     const label = document.createElement('label');
 
+    li.classList.add("deletable-li");
+
     input.type = 'checkbox';
     input.id = `item-${crypto.randomUUID()}`;
 
     label.setAttribute('for', input.id);
     label.textContent = texto;
 
-    input.addEventListener('change', () => removerElementoItem(li, texto));
+    input.addEventListener('change', () => (
+        removerElementoItem(li, texto, li.parentElement)
+    ));
 
     li.appendChild(input);
     li.appendChild(label);
@@ -95,9 +108,11 @@ function listarItens(elementoLista, qtd = -1) {
     if (qtd === -1) qtd = itens.length;
     const min = Math.min(qtd, itens.length);
 
-    if (itens.length === 0) {
+    if (elementoLista.innerHTML)
+        elementoLista.innerHTML = '';
+
+    if (itens.length === 0)
         elementoLista.innerHTML = '<li>Nenhum item cadastrado.</li>';
-    }
     else for (let ind = 0; ind < min; ind++)
         elementoLista.appendChild(formatarItem(itens[ind]));
 }
@@ -106,17 +121,5 @@ const listaItens = document.getElementById('lista');
 const resumoItens = document.getElementById('lista-resumo');
 const qtd = 5;
 
-if (listaItens) {
-    window.onload = () => listarItens(listaItens);
-    listaItens.addEventListener('change', () => {
-        listaItens.innerHTML = '';
-        listarItens(listaItens, qtd);
-    });
-}
-if (resumoItens) {
-    window.onload = () => listarItens(resumoItens, qtd);
-    resumoItens.addEventListener('change', () => {
-        resumoItens.innerHTML = '';
-        listarItens(resumoItens, qtd);
-    });
-}
+if (listaItens) window.onload = () => listarItens(listaItens);
+if (resumoItens) window.onload = () => listarItens(resumoItens, qtd);
