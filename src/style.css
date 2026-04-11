@@ -195,6 +195,25 @@ form input {
     width: 25px;
 }
 
+#lista-resumo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.resumo-item:hover {
+    background-color: var(--light-grey);
+}
+
+.resumo-item {
+    justify-content: center;
+    text-align: center;
+}
+
+#lista-resumo li {
+    margin: 0;
+}
+
 .input-error {
     animation-name: pulse-error;
     animation-duration: 1s;
@@ -280,6 +299,10 @@ form input {
 
     .add-item button {
         font-size: 0.85rem;
+    }
+
+    #lista-resumo {
+        grid-template-columns: 1fr;
     }
 }
 
