@@ -1,3 +1,5 @@
+import './style.css';
+
 // Gerenciador de Itens (Armazenamento em Memória da Sessão)
 const Armazenamento = {
     getItens() {
