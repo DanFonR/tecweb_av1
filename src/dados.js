@@ -79,47 +79,55 @@ function removerElementoItem(elementoItem, texto, elementoPai, qtd = -1) {
     });
 }
 
-function formatarItem(texto) {
+function formatarItem(texto, modoResumo = false) {
     const li = document.createElement('li');
-    const input = document.createElement('input');
-    const label = document.createElement('label');
 
-    li.classList.add("deletable-li");
+    if (!modoResumo) {
+        const input = document.createElement('input');
+        const label = document.createElement('label');
 
-    input.type = 'checkbox';
-    input.id = `item-${crypto.randomUUID()}`;
+        li.classList.add("deletable-li");
 
-    label.setAttribute('for', input.id);
-    label.textContent = texto;
+        input.type = 'checkbox';
+        input.id = `item-${crypto.randomUUID()}`;
 
-    input.addEventListener('change', () => (
-        removerElementoItem(li, texto, li.parentElement)
-    ));
+        label.setAttribute('for', input.id);
+        label.textContent = texto;
 
-    li.appendChild(input);
-    li.appendChild(label);
+        input.addEventListener('change', () => (
+            removerElementoItem(li, texto, li.parentElement)
+        ));
+
+        li.appendChild(input);
+        li.appendChild(label);
+    } else {
+        li.textContent = texto;
+        li.classList.add("resumo-item");
+    }
 
     return li;
 }
 
-function listarItens(elementoLista, qtd = -1) {
+function listarItens(elementoLista, qtd = -1, modoResumo = false) {
     const itens = Armazenamento.getItens();
 
     if (qtd === -1) qtd = itens.length;
     const min = Math.min(qtd, itens.length);
 
-    if (elementoLista.innerHTML)
-        elementoLista.innerHTML = '';
+    elementoLista.innerHTML = '';
 
-    if (itens.length === 0)
+    if (itens.length === 0) {
         elementoLista.innerHTML = '<li>Nenhum item cadastrado.</li>';
-    else for (let ind = 0; ind < min; ind++)
-        elementoLista.appendChild(formatarItem(itens[ind]));
+        return;
+    }
+
+    for (let ind = 0; ind < min; ind++)
+        elementoLista.appendChild(formatarItem(itens[ind], modoResumo));
 }
 
 const listaItens = document.getElementById('lista');
 const resumoItens = document.getElementById('lista-resumo');
-const qtd = 5;
+const qtd = 8;
 
 if (listaItens) window.onload = () => listarItens(listaItens);
-if (resumoItens) window.onload = () => listarItens(resumoItens, qtd);
+if (resumoItens) window.onload = () => listarItens(resumoItens, qtd, true);
