@@ -27,3 +27,14 @@ npm install; npm run dev
 Em seguida, acesse http://localhost:5173/ em um navegador.
 
 Para parar a execução, aperte `Ctrl + C` no terminal onde mostra o _link_ de acesso do site.
+
+## Preview
+
+<img width="480" alt="Página principal sem itens" src="https://github.com/user-attachments/assets/67376565-f3a3-435e-afdb-05c3768b2e4a" />
+<img width="480" alt="Lista sem itens" src="https://github.com/user-attachments/assets/ab0dde98-12d2-40bc-885f-d2574f7723c3" />
+<img width="480" alt="Botão adicionando item" src="https://github.com/user-attachments/assets/a10b8420-4bb9-48be-92f8-6e14c5fc1a1a" />
+<img width="480" alt="Entrada de texto aceita" src="https://github.com/user-attachments/assets/7cbafa2a-a1c3-4681-83dd-8c390ce3f6dc" />
+<img width="480" alt="Entrada de texto rejeitada" src="https://github.com/user-attachments/assets/b5d2c019-fa49-4526-b063-dadf500face7" />
+<img width="480" alt="Entrada de texto vazia" src="https://github.com/user-attachments/assets/c1c02ea4-ef25-4b6c-b3af-3a51601a3071" />
+<img width="480" alt="Lista com itens e item a ser excluído em vermelho" src="https://github.com/user-attachments/assets/1c57d422-b9e6-4fcd-81a8-dd43c5ba7d88" />
+<img width="480" alt="Página principal com itens" src="https://github.com/user-attachments/assets/1cbbaed4-8c13-4372-8f1d-15d4a4947764" />
