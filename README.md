@@ -3,7 +3,7 @@
 ## Participantes
 
 - Dannyel Fontenele Ribeiro – 2322130061
-- Nálbert Barbosa Nascimento Bernardo – 2311130036
+- Nálbert Barbosa Nascimento Bernardo – 2322130036
 - Regimar de Deus Negreiros – 2322130016
 
 ## Sobre
@@ -16,12 +16,23 @@ O usuário tem acesso a três páginas:
 2. Página de cadastro de itens: indica quando um item foi cadastrado com sucesso, quando o usuário digitou nada na entrada, e quando um item já foi cadastrado. Possui também botões com sugestões de itens;
 3. Página de listagem de itens: possui a lista completa dos itens em forma de lista vertical. Cada item tem uma caixa de seleção, e, caso seja clicada, exclui o item da listagem.
 
-## Como executar
+## Instalação e Execução
 
-Instale o NPM, e, na raíz do projeto (isso é, onde se encontra este README), execute o seguinte comando no terminal:
+### Instalação
+
+1. Siga as instruções de como baixar e instalar o [Node.js e o NPM](https://nodejs.org/en/download/).
+2. Na raíz do projeto (isso é, onde se encontra este README), execute o seguinte comando no terminal para instalar as dependências do projeto:
 
 ```sh
-npm install; npm run dev
+npm install
+```
+
+### Execução
+
+Ainda na raíz do projeto, digite:
+
+```sh
+npm run dev
 ```
 
 Em seguida, acesse http://localhost:5173/ em um navegador.
